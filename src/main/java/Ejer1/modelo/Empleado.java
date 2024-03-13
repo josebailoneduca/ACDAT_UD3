@@ -10,20 +10,21 @@ package Ejer1.modelo;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Jose Javier Bailon Ortiz
  */
-@Entity (name = "Empleados")
-@Table(name = "Empleados")
+@Entity (name = "empleado")
+@Table(name = "empleado")
 public class Empleado implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -44,6 +45,20 @@ public class Empleado implements Serializable {
     
     @Column(name = "Sueldo", nullable=false)
     private double Sueldo;
+    
+    
+    @ManyToOne(fetch=FetchType.LAZY)
+    //Aquí sí necesitamos indicar LAZY porque por defecto es EAGER, y no 
+    //interesa que cargue TODO el contenido que referencia el objeto autor:
+    //- Es algo curioso porque podríamos pensar que no debería cargarlo pero
+    //  lo hace y carga todos los campos del autor.
+    //- Con LAZY sólo se cargará cuando se haga alguna operación como un "get"
+    @JoinColumn(name = "IDTrabajo")
+    private Trabajo trabajo;
+    
+    
+    
+    
     public Empleado(){}
     public Empleado(String Nombre, String Apellidos, String DNI, double Sueldo) {
       
@@ -53,17 +68,7 @@ public class Empleado implements Serializable {
         this.Sueldo = Sueldo;
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        
     public int getIDEmpleado() {
         return IDEmpleado;
     }
@@ -104,6 +109,16 @@ public class Empleado implements Serializable {
         this.Sueldo = Sueldo;
     }
 
+    
+        public Trabajo getTrabajo() {
+        return trabajo;
+    }
+
+    public void setTrabajo(Trabajo trabajo) {
+        this.trabajo = trabajo;
+    }
+    
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -128,7 +143,7 @@ public class Empleado implements Serializable {
 
     @Override
     public String toString() {
-        return "Empleado{" + "IDEmpleado=" + IDEmpleado + ", Nombre=" + Nombre + ", Apellidos=" + Apellidos + ", DNI=" + DNI + ", Sueldo=" + Sueldo + '}';
+        return "Empleado{" + "IDEmpleado=" + IDEmpleado + ", Nombre=" + Nombre + ", Apellidos=" + Apellidos + ", DNI=" + DNI + ", Sueldo=" + Sueldo +", Trabajo="+trabajo.getIDTrabajo()+ '}';
     }
  
     
